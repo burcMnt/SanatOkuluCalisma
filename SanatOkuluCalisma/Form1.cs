@@ -26,23 +26,51 @@ namespace SanatOkuluCalisma
             cboSanatci.DataSource = db.Sanatcilar.OrderBy(x => x.Ad).ToList();
             cboSanatci.ValueMember = "Id";
             cboSanatci.DisplayMember = "Ad";
+            cboSanatci.SelectedIndex = -1;
         }
 
         private void pboYeniSanatci_Click(object sender, EventArgs e)
         {
-            var frm = new SanatciForm(db);
-            if (DialogResult.OK == frm.ShowDialog())
-            {
-                SanatcilariYukle();
-            }
-
+            SanatciFormuAc();
         }
 
-        private void btnEkle_Click(object sender, EventArgs e)
+        void SanatciFormuAc()
         {
-
+            var frm = new SanatciForm(db);
+            frm.SanatcilarDegisti += Frm_SanatcilarDegisti;
+            frm.ShowDialog();
         }
 
+        private void Frm_SanatcilarDegisti(object sender, EventArgs e)
+        {
+            EserleriListele();
+            SanatcilariYukle();
+        }
+
+        private void btnEkle_Click_1(object sender, EventArgs e)
+        {
+            string ad = txtAd.Text.Trim();
+            if (ad == "")
+            {
+                MessageBox.Show("Lütfen Sanat Eserinin Adını Belirtiniz.");
+                return;
+            }
+            if (cboSanatci.SelectedIndex == -1)
+            {
+                MessageBox.Show("Lütfen Bir Sanatcı Seçiniz.");
+                return;
+            }
+            var eser = new Eser()
+            {
+                Ad = ad,
+                SanatciId = (int)cboSanatci.SelectedValue,
+                Yil = mtbYil.Text == "" ? null as int? : Convert.ToInt32(mtbYil.Text)
+            };
+            db.Eserler.Add(eser);
+            db.SaveChanges();
+            FormuResetle();
+            EserleriListele();
+        }
         private void EserleriListele()
         {
             lvwEserler.Items.Clear();
@@ -53,8 +81,6 @@ namespace SanatOkuluCalisma
                 lvi.SubItems.Add(item.Yil.ToString());
                 lvwEserler.Items.Add(lvi);
             }
-
-            
         }
 
         private void FormuResetle()
@@ -64,5 +90,11 @@ namespace SanatOkuluCalisma
             cboSanatci.SelectedIndex = -1;
             mtbYil.Clear();
         }
+
+        private void tsmiSanatcilar_Click(object sender, EventArgs e)
+        {
+            SanatciFormuAc();
+        }
+
     }
 }

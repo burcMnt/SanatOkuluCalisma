@@ -100,6 +100,7 @@ namespace SanatOkuluCalisma
             this.btnEkle.TabIndex = 6;
             this.btnEkle.Text = "EKLE";
             this.btnEkle.UseVisualStyleBackColor = true;
+            this.btnEkle.Click += new System.EventHandler(this.btnEkle_Click_1);
             // 
             // mtbYil
             // 
@@ -189,6 +190,7 @@ namespace SanatOkuluCalisma
             this.tsmiSanatcilar.Name = "tsmiSanatcilar";
             this.tsmiSanatcilar.Size = new System.Drawing.Size(88, 24);
             this.tsmiSanatcilar.Text = "Sanatçılar";
+            this.tsmiSanatcilar.Click += new System.EventHandler(this.tsmiSanatcilar_Click);
             // 
             // Form1
             // 
